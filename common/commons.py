@@ -3,8 +3,8 @@
 
 import json
 
-def http_reponse(self,msg,code):
+def http_response(self,msg,code):
     self.write(json.dumps({"data":{"msg":msg,"code":code}}))
 
 if __name__ == "__main__":
-    http_reponse()
+    http_response()

@@ -8,25 +8,24 @@ import tornado.ioloop
 import tornado.web
 import os
 import sys
-import shutil
 
 from tornado.options import define,options
 from common.url_router import include,url_wrapper
 
 class Application(tornado.web.Application):
     
-    def _init_(self):
+    def __init__(self):
 
-        handles = url_wrapper([
-            (r"/users",include('views.users.users_urls'))
+        handlers = url_wrapper([
+            (r"/users/",include('views.users.users_urls'))
         ])
 
         settings = dict(
             debug = True,
             static_path = os.path.join(os.path.dirname(__file__),"static"),
-            template_path = os.path.join(os.path.dirname(__file__),"template")
+            template_path = os.path.join(os.path.dirname(__file__),"templates")
         )
-        tornado.web.Application.__init__(self,handles,**settings)
+        tornado.web.Application.__init__(self,handlers,**settings)
 
 
 if __name__ == '__main__':

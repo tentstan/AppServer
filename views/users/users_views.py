@@ -13,11 +13,11 @@ from conf.base import(
 )
 
 class RegisterHandle(tornado.web.RequestHandler):
-    '''handle /users/register request
+    """handle /users/register request
     param phone:user sign up phone
     param password:user sign up password
     param code:user sign up code,must six digital code
-    '''
+    """
 
     def post(self):
         try:
@@ -29,4 +29,4 @@ class RegisterHandle(tornado.web.RequestHandler):
             http_response(self,ERROR_CODE['1001'],1001)
             return
         
-        http_response(self,ERROR['0'],0)
+        http_response(self,ERROR_CODE['0'],0)
