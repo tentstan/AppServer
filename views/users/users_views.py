@@ -4,6 +4,8 @@
 import tornado.web
 from tornado.escape import json_decode
 
+import common.logger
+
 from common.commons import(
     http_response,
 )
@@ -11,6 +13,8 @@ from common.commons import(
 from conf.base import(
     ERROR_CODE,
 )
+
+log = Logger.Logger().getlog(logname='log.txt', loglevel=1, logger="fox")
 
 class RegisterHandle(tornado.web.RequestHandler):
     """handle /users/register request
@@ -26,7 +30,9 @@ class RegisterHandle(tornado.web.RequestHandler):
             password = args['password']
             verify_code = args['code']
         except:
+            log.info("RegisterHandle: request argument incorrect!")
             http_response(self,ERROR_CODE['1001'],1001)
             return
         
+        log.debug("RegisterHandle: register Success!")
         http_response(self,ERROR_CODE['0'],0)
