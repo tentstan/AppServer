@@ -3,6 +3,7 @@
 
 import tornado.web
 from tornado.escape import json_decode
+from datetime import datetime
 
 import common.logger
 from common.logger import Logger
@@ -15,6 +16,10 @@ from conf.base import(
     ERROR_CODE,
 )
 
+
+from models import(
+    Users)
+
 log = Logger(logname='log/users/users.log', loglevel=1, logger="users").getlog()
 
 class RegisterHandle(tornado.web.RequestHandler):
@@ -23,6 +28,10 @@ class RegisterHandle(tornado.web.RequestHandler):
     param password:user sign up password
     param code:user sign up code,must six digital code
     """
+
+    @property
+    def db(self):
+        return self.application.db
 
     def post(self):
         try:
@@ -35,5 +44,18 @@ class RegisterHandle(tornado.web.RequestHandler):
             http_response(self,ERROR_CODE['1001'],1001)
             return
         
-        log.debug("RegisterHandle: register Success!")
-        http_response(self,ERROR_CODE['0'],0)
+        ex_user = self.db.query(Users).filter_by(phone=phone).first()
+        if ex_user:
+            http_response(self,ERROR_CODE['1002'],1002)
+            self.db.close()
+            return
+        else:
+            log.debug("RegisterHandle: insert db,user:%s" %(phone))
+            create_time = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+            add_user = Users(phone,password,create_time)
+            self.db.add(add_user)
+            self.db.commit()
+            self.db.close()
+
+            log.debug("RegisterHandle: register Success!")
+            http_response(self,ERROR_CODE['0'],0)
