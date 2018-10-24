@@ -5,6 +5,7 @@ import tornado.web
 from tornado.escape import json_decode
 
 import common.logger
+from common.logger import Logger
 
 from common.commons import(
     http_response,
@@ -14,7 +15,7 @@ from conf.base import(
     ERROR_CODE,
 )
 
-log = Logger.Logger().getlog(logname='log.txt', loglevel=1, logger="fox")
+log = Logger(logname='log/users/users.log', loglevel=1, logger="users").getlog()
 
 class RegisterHandle(tornado.web.RequestHandler):
     """handle /users/register request
