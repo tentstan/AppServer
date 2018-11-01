@@ -13,5 +13,6 @@ ERROR_CODE = {
     "0":"Success",
     "1001":"Invalid params",
     "1002":"user is registered, please login",
+    "1003":"user has not been registered,please register",
     "2001":"image upload can not be empty"
 }

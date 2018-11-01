@@ -59,3 +59,33 @@ class RegisterHandle(tornado.web.RequestHandler):
 
             log.debug("RegisterHandle: register Success!")
             http_response(self,ERROR_CODE['0'],0)
+
+
+class LoginHandle(tornado.web.RequestHandler):
+    """ handle /users/login request
+        param phone: user sign up phone
+        param password:user sign up password
+    """
+    @property 
+    def db(self):
+        return self.application.db
+
+    def get(self):
+        try:
+            phone = self.get_argument("phone")
+            password = self.get_argument("password")
+        except:
+            log.info("LoginHandle:request argument incorrect")
+            http_response(self,ERROR_CODE['1001'],1001)
+            return
+
+        ex_user = self.db.query(Users).filter_by(phone=phone).first()
+        if ex_user:
+            log.debug("LoginHandle: get user login,%s" %(phone))
+            self.render("index.html")
+            self.db.close()
+            return
+        else:
+            http_response(self,ERROR_CODE['1003'],1003)
+            self.db.close()
+            return
